@@ -4,7 +4,7 @@ plugins {
     `maven-publish`
 }
 
-group = "com.github.ajsnarr98"
+group = "com.github.ajsnarr98.smartdoorcloser"
 version = "1.0"
 description = "Alexa Smart Home Door Closer"
 java.sourceCompatibility = JavaVersion.VERSION_1_8
@@ -19,7 +19,7 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib"))
-    implementation("org.json:json:20180130")
+    implementation("com.google.code.gson:gson:2.8.6")
     implementation("com.amazonaws:aws-lambda-java-core:1.2.0")
     implementation("com.amazonaws:aws-java-sdk-dynamodb:1.11.327")
     testImplementation("junit:junit:4.13.1")
@@ -33,6 +33,17 @@ sourceSets {
             )
         }
     }
+}
+
+tasks.jar {
+
+    // To add all of the dependencies
+    from(sourceSets.main.get().output)
+
+    dependsOn(configurations.runtimeClasspath)
+    from ({
+        configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) }
+    })
 }
 
 publishing {

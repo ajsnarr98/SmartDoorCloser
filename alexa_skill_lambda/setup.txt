@@ -1,0 +1,17 @@
+
+[Login with Amazon Client ID]
+amzn1.application-oa2-client.60cf2f7e7efd4d7da8644726100b45ee
+
+[Login with Amazon Client Secret]
+7b737130c2c31fca28711b0eedd930d0cadb06e787f343aa82433f52d03f5a76
+
+[Alexa Skill Application ID]
+amzn1.ask.skill.c2e8dbe4-e9d4-4a8c-b945-f8df17e96af1
+
+[AWS Lambda ARN]
+arn:aws:lambda:us-east-1:853231945118:function:skill-smarthome-door-closer-main
+
+[Redirect URLs]
+https://pitangui.amazon.com/api/skill/link/M3U70M6V2UJSCX
+https://layla.amazon.com/api/skill/link/M3U70M6V2UJSCX
+https://alexa.amazon.co.jp/api/skill/link/M3U70M6V2UJSCX
