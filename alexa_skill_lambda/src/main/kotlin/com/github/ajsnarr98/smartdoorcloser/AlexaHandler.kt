@@ -2,10 +2,12 @@ package com.github.ajsnarr98.smartdoorcloser
 
 import com.amazonaws.services.lambda.runtime.Context
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler
+import com.github.ajsnarr98.smartdoorcloser.response.AuthorizationResponse
+import com.github.ajsnarr98.smartdoorcloser.response.DiscoveryResponse
+import com.github.ajsnarr98.smartdoorcloser.response.ToggleControllerResponse
 import com.google.gson.GsonBuilder
 import java.io.InputStream
 import java.io.OutputStream
-import java.util.Scanner
 
 class AlexaHandler : RequestStreamHandler {
 
@@ -20,16 +22,26 @@ class AlexaHandler : RequestStreamHandler {
      * Handles the given json request.
      */
     fun handleRequest(request: String, context: Context?): String {
-        val directive = SmartHomeRequest.newInstance(gson, request)
-
         val logger = LoggerNonNull(context?.logger)
+
+        val parsedRequest = SmartHomeRequest.newInstance(gson, request)
+        val directive = parsedRequest.directive
+        val responseObj = when (directive?.header?.namespace) {
+            "Alexa.Authorization" -> AuthorizationResponse.newInstance(parsedRequest)
+            "Alexa.Discovery" -> DiscoveryResponse.newInstance(parsedRequest)
+            "Alexa.ToggleController" -> ToggleControllerResponse.newInstance(parsedRequest)
+            else -> throw IllegalArgumentException("Unknown directive: ${directive?.header?.namespace}")
+        }
+
         val response = "200 OK"
         // log execution details
-        logger.log("ENVIRONMENT VARIABLES: " + gson.toJson(System.getenv()))
-        logger.log("CONTEXT: " + gson.toJson(context))
-        // process event
-        logger.log("REQUEST: $request")
-        logger.log("DECODED REQUEST: " + directive.toJson(gson))
+        logger.log("ENVIRONMENT VARIABLES: ${gson.toJson(System.getenv())}\n")
+        logger.log("CONTEXT: ${gson.toJson(context)}\n")
+        logger.log("REQUEST: $request\n")
+
         return response
     }
+
+    private fun getField(str: String?): String
+        = str ?: throw IllegalArgumentException("Required field was null.")
 }
