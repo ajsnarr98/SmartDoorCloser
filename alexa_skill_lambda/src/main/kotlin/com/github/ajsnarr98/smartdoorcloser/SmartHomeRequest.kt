@@ -32,15 +32,27 @@ data class SmartHomeRequest constructor(
 
     data class Payload(
         val scope: Scope? = null,
-    )
-
-    data class Endpoint(
-        val scope: Scope? = null,
-        val endpointId: String? = null,
+        val grant: Grant? = null,
+        val grantee: Grantee? = null,
     )
 
     data class Scope(
         val type: String? = null,
         val token: String? = null,
+    )
+
+    data class Grant(
+        val type: String? = null,
+        val code: String? = null,
+    )
+
+    data class Grantee(
+        val type: String? = null,
+        val token: String? = null,
+    )
+
+    data class Endpoint(
+        val scope: Scope? = null,
+        val endpointId: String? = null,
     )
 }

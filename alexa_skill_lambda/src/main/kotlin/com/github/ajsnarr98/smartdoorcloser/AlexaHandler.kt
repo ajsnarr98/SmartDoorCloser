@@ -21,7 +21,7 @@ class AlexaHandler : RequestStreamHandler {
     /**
      * Handles the given json request.
      */
-    fun handleRequest(request: String, context: Context?): String {
+    private fun handleRequest(request: String, context: Context?): String {
         val logger = LoggerNonNull(context?.logger)
 
         val parsedRequest = SmartHomeRequest.newInstance(gson, request)
@@ -33,15 +33,6 @@ class AlexaHandler : RequestStreamHandler {
             else -> throw IllegalArgumentException("Unknown directive: ${directive?.header?.namespace}")
         }
 
-        val response = "200 OK"
-        // log execution details
-        logger.log("ENVIRONMENT VARIABLES: ${gson.toJson(System.getenv())}\n")
-        logger.log("CONTEXT: ${gson.toJson(context)}\n")
-        logger.log("REQUEST: $request\n")
-
-        return response
+        return responseObj.toJson(gson)
     }
-
-    private fun getField(str: String?): String
-        = str ?: throw IllegalArgumentException("Required field was null.")
 }
