@@ -16,125 +16,130 @@ abstract class Response protected constructor(private val resp: RawResponse) {
      * Json response template.
      */
     protected data class RawResponse(
-        val event: Event? = null,
-        val context: Context? = null,
+        var event: Event? = null,
+        var context: Context? = null,
     )
 
     protected data class Event(
-        val header: Header? = null,
-        val endpoint: Endpoint? = null,
+        var header: Header? = null,
+        var endpoint: Endpoint? = null,
+        var payload: Payload? = null,
     )
 
     protected data class Header(
-        val namespace: String? = null,
-        val name: String? = null,
-        val messageId: String? = null,
-        val payloadVersion: String? = null,
+        var namespace: String? = null,
+        var name: String? = null,
+        var messageId: String? = null,
+        var payloadVersion: String? = null,
+    )
+
+    protected data class Payload(
+        var endpoints: List<Endpoint>? = null,
     )
 
     protected data class Endpoint(
-        val scope: Scope? = null,
-        val endpointId: String? = null,
-        val manufacturerName: String? = null,
-        val description: String? = null,
-        val friendlyName: String? = null,
-        val additionalAttributes: EndpointAdditionalAttributes? = null,
-        val displayCategories: List<String>? = null,
-        val capabilities: List<EndpointCapability>? = null,
-        val connections: List<EndpointConnection>? = null,
+        var scope: Scope? = null,
+        var endpointId: String? = null,
+        var manufacturerName: String? = null,
+        var description: String? = null,
+        var friendlyName: String? = null,
+        var additionalAttributes: EndpointAdditionalAttributes? = null,
+        var displayCategories: List<String>? = null,
+        var capabilities: List<EndpointCapability>? = null,
+        var connections: List<EndpointConnection>? = null,
     )
 
     protected data class Scope(
-        val type: String? = null,
-        val token: String? = null,
+        var type: String? = null,
+        var token: String? = null,
     )
 
     protected data class EndpointAdditionalAttributes(
-        val manufacturer: String? = null,
-        val model: String? = null,
-        val serialNumber: String? = null,
-        val firmwareVersion: String? = null,
-        val softwareVersion: String? = null,
-        val customIdentifier: String? = null,
+        var manufacturer: String? = null,
+        var model: String? = null,
+        var serialNumber: String? = null,
+        var firmwareVersion: String? = null,
+        var softwareVersion: String? = null,
+        var customIdentifier: String? = null,
     )
 
     protected data class EndpointCapability(
-        val type: String? = null,
-        val `interface`: String? = null,
-        val instance: String? = null,
-        val version: String? = null,
-        val properties: List<EndpointCapabilityProperties>? = null,
-        val capabilityResources: EndpointCapabilityResources? = null,
-        val semantics: Semantics? = null,
+        var type: String? = null,
+        var `interface`: String? = null,
+        var instance: String? = null,
+        var version: String? = null,
+        var properties: List<EndpointCapabilityProperties>? = null,
+        var capabilityResources: EndpointCapabilityResources? = null,
+        var semantics: Semantics? = null,
     )
 
     protected data class EndpointCapabilityProperties(
-        val supported: List<EndpointCapabilityPropertiesSupported>? = null,
-        val proactivelyReported: Boolean? = null,
-        val retrievable: Boolean? = null,
-        val nonControllable: Boolean? = null,
+        var supported: List<EndpointCapabilityPropertiesSupported>? = null,
+        var proactivelyReported: Boolean? = null,
+        var retrievable: Boolean? = null,
+        var nonControllable: Boolean? = null,
     )
 
     protected data class EndpointCapabilityPropertiesSupported(
-        val name: String? = null,
+        var name: String? = null,
     )
 
     protected data class EndpointCapabilityResources(
-        val friendlyNames: List<EndpointCapabilityResourcesFriendlyName>? = null,
+        var friendlyNames: List<EndpointCapabilityResourcesFriendlyName>? = null,
     )
 
     protected data class EndpointCapabilityResourcesFriendlyName(
-        val `@type`: String? = null,
-        val value: EndpointCapabilityResourcesFriendlyNameValue? = null,
+        var `@type`: String? = null,
+        var value: EndpointCapabilityResourcesFriendlyNameValue? = null,
     )
 
     protected data class EndpointCapabilityResourcesFriendlyNameValue(
-        val text: String? = null,
-        val locale: String? = null,
+        var text: String? = null,
+        var locale: String? = null,
     )
 
     protected data class Semantics(
-        val actionMappings: List<SemanticsActionMapping>? = null,
-        val stateMappings: List<SemanticsStateMapping>? = null,
+        var actionMappings: List<SemanticsActionMapping>? = null,
+        var stateMappings: List<SemanticsStateMapping>? = null,
     )
 
     protected data class SemanticsActionMapping(
-        val `@type`: String? = null,
-        val actions: List<String>? = null,
-        val directive: SemanticsActionMappingDirective? = null,
+        var `@type`: String? = null,
+        var actions: List<String>? = null,
+        var directive: SemanticsActionMappingDirective? = null,
     )
 
     protected data class SemanticsActionMappingDirective(
-        val name: String? = null,
+        var name: String? = null,
     )
 
     protected data class SemanticsStateMapping(
-        val `@type`: String? = null,
-        val states: List<String>? = null,
-        val value: String? = null,
+        var `@type`: String? = null,
+        var states: List<String>? = null,
+        var value: String? = null,
     )
 
     protected data class EndpointConnection(
-        val type: String? = null,
-        val macAddress: String? = null,
-        val value: String? = null,
-        val homeId: String? = null,
-        val nodeId: String? = null,
+        var type: String? = null,
+        var macAddress: String? = null,
+        var value: String? = null,
+        var homeId: String? = null,
+        var nodeId: String? = null,
     )
 
     protected data class Context(
-        val properties: List<ContextProperty>? = null
+        var properties: List<ContextProperty>? = null
     )
 
     /**
      * @property timeOfSample example: "2017-02-03T16:20:50.52Z"
      */
     protected data class ContextProperty(
-        val namespace: String? = null,
-        val instance: String? = null,
-        val name: String? = null,
-        val value: String? = null,
-        val timeOfSample: String? = null,
-        val uncertaintyInMilliseconds: Int? = null,
+        var namespace: String? = null,
+        var instance: String? = null,
+        var name: String? = null,
+        var value: String? = null,
+        var timeOfSample: String? = null,
+        var uncertaintyInMilliseconds: Int? = null,
     )
 }
