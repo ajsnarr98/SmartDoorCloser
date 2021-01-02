@@ -2,21 +2,32 @@ plugins {
     application
     kotlin("jvm") version "1.3.70"
     java
+    `maven-publish`
 }
 
-// version = "0.1.0"
 group = "com.github.ajsnarr98"
+version = "1.0"
+description = "Alexa Smart Home Door Closer - Device"
+java.sourceCompatibility = JavaVersion.VERSION_1_8
 
 application {
     mainClassName = "com.github.ajsnarr98.main.MainKt"
 }
 
-dependencies {
-    implementation(kotlin("stdlib"))
-}
-
 repositories {
     jcenter()
+    mavenLocal()
+    maven {
+        url = uri("https://repo.maven.apache.org/maven2/")
+    }
+}
+
+dependencies {
+    implementation(kotlin("stdlib"))
+    implementation("com.google.code.gson:gson:2.8.6")
+    implementation("com.amazonaws:aws-lambda-java-core:1.2.0")
+    implementation("com.amazonaws:aws-java-sdk-dynamodb:1.11.327")
+    testImplementation("junit:junit:4.13.1")
 }
 
 sourceSets {
@@ -31,14 +42,14 @@ sourceSets {
 
 tasks.jar {
     manifest {
-        attributes("Main-Class" to "com.stuffhere.main.MainKt")
+        attributes("Main-Class" to "com.github.ajsnarr98.main.MainKt")
     }
 
     // To add all of the dependencies
     from(sourceSets.main.get().output)
 
     dependsOn(configurations.runtimeClasspath)
-    from { 
+    from ({
         configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) }
-    }
+    })
 }

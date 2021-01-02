@@ -6,7 +6,7 @@ plugins {
 
 group = "com.github.ajsnarr98.smartdoorcloser"
 version = "1.0"
-description = "Alexa Smart Home Door Closer"
+description = "Alexa Smart Home Door Closer - Alexa Skill Lambda"
 java.sourceCompatibility = JavaVersion.VERSION_1_8
 
 repositories {
