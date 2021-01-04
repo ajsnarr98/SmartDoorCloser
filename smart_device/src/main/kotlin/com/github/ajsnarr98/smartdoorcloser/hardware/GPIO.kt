@@ -6,6 +6,7 @@ import org.apache.logging.log4j.Level
 import java.io.IOException
 
 import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.Logger
 import java.io.Closeable
 
 /**
@@ -14,7 +15,8 @@ import java.io.Closeable
 object GPIO : Closeable {
 
     @JvmStatic
-    val log = LogManager.getLogger()
+    val log: Logger = LogManager.getLogger()
+    var initialized: Boolean = false
 
     enum class Level(val value: Int) {
         ON(1), OFF(0), ERROR(-1);
@@ -78,8 +80,13 @@ object GPIO : Closeable {
      * @return true if successful, false otherwise.
      */
     fun initialize(): Boolean {
-        log.info("Initializing pigpio")
-        return _initialize() >= 0
+        return if (!initialized) {
+            log.info("Initializing pigpio")
+            initialized = (_initialize() >= 0)
+            return initialized
+        } else {
+            false
+        }
     }
 
     private external fun _initialize(): Int
@@ -91,11 +98,18 @@ object GPIO : Closeable {
      * @return true if successful, false otherwise.
      */
     fun terminate(): Boolean {
-        for (user in users) {
-            user.onShutdown()
+        return if (initialized) {
+            for (user in users) {
+                user.onShutdown()
+            }
+            log.info("Terminating pigpio")
+            // finally, terminate pigpio
+            (_terminate() >= 0).also { termSuccess ->
+                initialized = !termSuccess
+            }
+        } else {
+            false
         }
-        log.info("Terminating pigpio")
-        return _terminate() >= 0 // finally, terminate pigpio
     }
 
     private external fun _terminate(): Int
