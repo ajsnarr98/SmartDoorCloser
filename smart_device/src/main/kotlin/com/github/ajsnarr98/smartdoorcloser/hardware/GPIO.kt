@@ -2,16 +2,19 @@ package com.github.ajsnarr98.smartdoorcloser.hardware
 
 import com.ajsnarr.hauntedgameboard.hardware.GPIOUser
 import cz.adamh.utils.NativeUtils
+import org.apache.logging.log4j.Level
 import java.io.IOException
 
-import com.github.ajsnarr98.smartdoorcloser.util.LogLevel
-import com.github.ajsnarr98.smartdoorcloser.util.LOG_LEVEL
+import org.apache.logging.log4j.LogManager
 import java.io.Closeable
 
 /**
  * A class containing native methods for communicating with raspberry pi gpio pins.
  */
 object GPIO : Closeable {
+
+    @JvmStatic
+    val log = LogManager.getLogger()
 
     enum class Level(val value: Int) {
         ON(1), OFF(0), ERROR(-1);
@@ -28,7 +31,7 @@ object GPIO : Closeable {
         } catch (e: IOException) {
             throw RuntimeException(e.toString())
         }
-        setLogLevel(LOG_LEVEL)
+        setLogLevel(log.level)
     }
 
     val users = mutableListOf<GPIOUser>()
@@ -57,8 +60,14 @@ object GPIO : Closeable {
     /**
      * Sets the log level within native code.
      */
-    fun setLogLevel(logLevel: LogLevel) {
-        _setLogLevel(logLevel.value)
+    fun setLogLevel(logLevel: org.apache.logging.log4j.Level) {
+        _setLogLevel(when (logLevel) {
+            org.apache.logging.log4j.Level.ALL, org.apache.logging.log4j.Level.TRACE -> 0
+            org.apache.logging.log4j.Level.DEBUG -> 1
+            org.apache.logging.log4j.Level.INFO -> 2
+            org.apache.logging.log4j.Level.WARN, org.apache.logging.log4j.Level.ERROR, org.apache.logging.log4j.Level.FATAL -> 3
+            else -> 4
+        })
     }
 
     private external fun _setLogLevel(logLevel: Int): Int
@@ -69,6 +78,7 @@ object GPIO : Closeable {
      * @return true if successful, false otherwise.
      */
     fun initialize(): Boolean {
+        log.info("Initializing pigpio")
         return _initialize() >= 0
     }
 
@@ -84,6 +94,7 @@ object GPIO : Closeable {
         for (user in users) {
             user.onShutdown()
         }
+        log.info("Terminating pigpio")
         return _terminate() >= 0 // finally, terminate pigpio
     }
 
@@ -98,6 +109,7 @@ object GPIO : Closeable {
      */
     fun setMode(gpio: Int, mode: Mode): Boolean {
         validateGpioPinNum(gpio)
+        log.debug("Calling gpioSetMode")
         return _setMode(gpio, mode.value) >= 0
     }
 
@@ -111,6 +123,7 @@ object GPIO : Closeable {
      */
     fun getMode(gpio: Int): Mode {
         validateGpioPinNum(gpio)
+        log.debug("Calling gpioGetMode")
         val modeVal = _getmode(gpio)
         for (mode in Mode.values()) {
             if (mode.value == modeVal) {
@@ -130,6 +143,7 @@ object GPIO : Closeable {
      */
     fun read(gpio: Int): Level {
         validateGpioPinNum(gpio)
+        log.debug("Calling gpioRead")
         val level = _read(gpio)
         return if (level > 0) {
             Level.ON
@@ -152,6 +166,7 @@ object GPIO : Closeable {
     fun write(gpio: Int, level: Level): Boolean {
         validateGpioPinNum(gpio)
         require(level != Level.ERROR) { "Must write either ON or OFF" }
+        log.debug("Calling gpioWrite")
         return _write(gpio, level.value) >= 0
     }
 
@@ -163,6 +178,7 @@ object GPIO : Closeable {
      * @return true if successful, false otherwise.
      */
     fun waveClear(): Boolean {
+        log.debug("Calling gpioWaveClear")
         return _waveClear() >= 0
     }
 
@@ -180,7 +196,8 @@ object GPIO : Closeable {
     fun waveRamps(gpio: Int, rampFrequencies: IntArray, rampNSteps: IntArray): Boolean {
         validateGpioPinNum(gpio)
         require(rampFrequencies.size == rampNSteps.size) { "Both array args must have same length." }
-        require(rampFrequencies.size != 0) { "Passed waveRamp arrays cannot be empty" }
+        require(rampFrequencies.isNotEmpty()) { "Passed waveRamp arrays cannot be empty" }
+        log.debug("Calling waveRamps")
         return _waveRamps(gpio, rampFrequencies, rampNSteps) >= 0
     }
 
@@ -191,6 +208,7 @@ object GPIO : Closeable {
      * @return true if a waveform is being transmitted, false otherwise.
      */
     fun waveIsBusy(): Boolean {
+        log.debug("Calling gpioWaveTxBusy")
         return _waveIsBusy()
     }
 
