@@ -62,5 +62,8 @@ gradle-app.setting
 # Cache of project
 .gradletasknamecache
 
-# secret
+# Config files
+id.dat
+
+# Secret
 alexa_skill/setup.txt
