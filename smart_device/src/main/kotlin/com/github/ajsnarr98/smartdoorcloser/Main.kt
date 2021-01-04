@@ -1,5 +1,6 @@
 package com.github.ajsnarr98.smartdoorcloser
 
+import com.github.ajsnarr98.smartdoorcloser.hardware.GPIO
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 
@@ -15,6 +16,14 @@ fun main(args: Array<String>) {
 //        log.fatal("Failed to initialize GPIO")
 //        return
 //    }
+
+//    // add shutdown hook for making sure gpio is closed
+//    Runtime.getRuntime().addShutdownHook(object : Thread() {
+//        override fun run() {
+//            log.info("Entering shutdown hook. Making sure GPIO is closed")
+//            GPIO.close()
+//        }
+//    })
 
 //    // use gpio and close at end of use
 //    GPIO.use {
