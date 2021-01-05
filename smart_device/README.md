@@ -1,3 +1,11 @@
+# Requirements
+Note: this is intended to be on a raspberry pi.
+
+1. Java 8 or higher (with ${JAVA_HOME} set)
+1. The pigpio library (for raspberry pi GPIO pins)
+1. Gradle
+1. Internet connection
+
 # Installation/Setup
 
 1. Download repo
