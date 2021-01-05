@@ -1,5 +1,6 @@
 package com.github.ajsnarr98.smartdoorcloser
 
+import com.github.ajsnarr98.smartdoorcloser.db.DB
 import com.github.ajsnarr98.smartdoorcloser.hardware.GPIO
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
@@ -9,6 +10,8 @@ val log: Logger = LogManager.getLogger()
 fun main(args: Array<String>) {
 
     log.debug("Beginning of main method")
+
+    val db = DB()
 
 //    if (GPIO.initialize()) {
 //        log.info("Initialized GPIO")
