@@ -4,7 +4,7 @@ import com.github.ajsnarr98.smartdoorcloser.SmartHomeRequest
 
 class ToggleControllerResponse private constructor(resp: RawResponse) : Response(resp) {
     companion object {
-        fun newInstance(directive: SmartHomeRequest): AuthorizationResponse {
+        fun newInstance(request: SmartHomeRequest): ToggleControllerResponse {
             TODO()
         }
     }

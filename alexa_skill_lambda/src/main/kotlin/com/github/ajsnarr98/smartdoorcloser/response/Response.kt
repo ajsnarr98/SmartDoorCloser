@@ -68,7 +68,7 @@ abstract class Response protected constructor(private val resp: RawResponse) {
         var `interface`: String? = null,
         var instance: String? = null,
         var version: String? = null,
-        var properties: List<EndpointCapabilityProperties>? = null,
+        var properties: EndpointCapabilityProperties? = null,
         var capabilityResources: EndpointCapabilityResources? = null,
         var semantics: Semantics? = null,
     )
