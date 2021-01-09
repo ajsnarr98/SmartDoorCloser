@@ -1,6 +1,6 @@
 plugins {
     application
-    kotlin("jvm") version "1.3.70"
+    kotlin("jvm") version "1.4.10"
     java
     `maven-publish`
 }
@@ -33,6 +33,7 @@ dependencies {
     // aws
     implementation("com.amazonaws:aws-lambda-java-core:1.2.0")
     implementation("com.amazonaws:aws-java-sdk-dynamodb:1.11.327")
+    implementation("software.amazon.awssdk.iotdevicesdk:aws-iot-device-sdk:1.2.11")
 
     // testing
     testImplementation("junit:junit:4.13.1")
