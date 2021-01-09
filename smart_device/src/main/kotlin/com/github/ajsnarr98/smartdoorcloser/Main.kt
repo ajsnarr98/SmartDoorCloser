@@ -11,6 +11,12 @@ import software.amazon.awssdk.crt.mqtt.MqttClientConnection
 import software.amazon.awssdk.crt.mqtt.MqttClientConnectionEvents
 import software.amazon.awssdk.iot.AwsIotMqttConnectionBuilder
 import java.util.concurrent.ExecutionException
+import java.util.concurrent.CompletableFuture
+
+import software.amazon.awssdk.iot.iotshadow.IotShadowClient
+
+
+
 
 const val EVENT_LOOP_THREADS = 1
 
@@ -45,7 +51,15 @@ fun main() {
         keyPath = "",
         onError = { exception -> log.error("Exception encountered: $exception") },
     ) { connection ->
+        val shadowClient = IotShadowClient(connection)
 
+        val connected: CompletableFuture<Boolean> = connection.connect()
+        try {
+            val sessionPresent = connected.get()
+            println("Connected to " + (if (!sessionPresent) "clean" else "existing") + " session!")
+        } catch (ex: Exception) {
+            throw RuntimeException("Exception occurred during connect", ex)
+        }
     }
 //    }
     log.debug("End of main method")
