@@ -31,8 +31,6 @@ dependencies {
     implementation(group="org.apache.logging.log4j", name="log4j-api", version="2.14.0")
     implementation(group="org.apache.logging.log4j", name="log4j-core", version="2.14.0")
     // aws
-    implementation("com.amazonaws:aws-lambda-java-core:1.2.0")
-    implementation("com.amazonaws:aws-java-sdk-dynamodb:1.11.327")
     implementation("software.amazon.awssdk.iotdevicesdk:aws-iot-device-sdk:1.2.11")
 
     // testing
