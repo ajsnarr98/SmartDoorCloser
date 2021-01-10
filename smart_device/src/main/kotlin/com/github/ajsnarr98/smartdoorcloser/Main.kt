@@ -41,14 +41,14 @@ fun main() {
 //        }
 //    })
 
+    // load config
+    Config.instance.verify()
+    val config = Config.instance
+
 //    // use gpio and close at end of use
 //    GPIO.use {
     useMqttClientConnection(
-        thingName = "",
-        clientId = "",
-        endpoint = "",
-        certPath = "",
-        keyPath = "",
+        config,
         onError = { exception -> log.error("Exception encountered: $exception") },
     ) { connection ->
         val shadowClient = IotShadowClient(connection)
@@ -69,22 +69,12 @@ fun main() {
  * Initializes necessary objects for creating the connection in a try block,
  * and closes everything afterward.
  *
- * @param thingName The name of the IoT thing
- * @param clientId The client ID to use when connecting
- * @param endpoint AWS IoT service endpoint hostname
- * @param certPath Path to the IoT thing certificate
- * @param keyPath Path to the IoT thing private key
- * @param rootCaPath Path to the root certificate (optional)
+ * @param config Configuration options
  * @param usingConnection Code block using connection
  * @param onError Code block called on relevant errors
  */
 private fun useMqttClientConnection(
-    thingName: String,
-    clientId: String,
-    endpoint: String,
-    certPath: String,
-    keyPath: String,
-    rootCaPath: String? = null,
+    config: Config,
     onConnectionInterrupted: (errorCode: Int) -> Unit = {},
     onConnectionResumed: (sessionPresent: Boolean) -> Unit = {},
     onError: (e: Exception) -> Unit,
@@ -99,14 +89,14 @@ private fun useMqttClientConnection(
         eventLoopGroup = EventLoopGroup(EVENT_LOOP_THREADS)
         resolver = HostResolver(eventLoopGroup)
         clientBootstrap = ClientBootstrap(eventLoopGroup, resolver)
-        builder = AwsIotMqttConnectionBuilder.newMtlsBuilderFromPath(certPath, keyPath)
+        builder = AwsIotMqttConnectionBuilder.newMtlsBuilderFromPath(config.certPath, config.keyPath)
 
-        if (rootCaPath != null) {
-            builder.withCertificateAuthorityFromPath(null, rootCaPath);
+        if (config.rootCaPath != null) {
+            builder.withCertificateAuthorityFromPath(null, config.rootCaPath);
         }
 
-        builder.withClientId(clientId)
-            .withEndpoint(endpoint)
+        builder.withClientId(config.clientId)
+            .withEndpoint(config.endpoint)
             .withCleanSession(true)
             .withConnectionEventCallbacks(object : MqttClientConnectionEvents {
                 override fun onConnectionInterrupted(errorCode: Int) {

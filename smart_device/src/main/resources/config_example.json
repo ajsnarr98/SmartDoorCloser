@@ -1,0 +1,14 @@
+{
+  "_thingName_description": "The name of the IoT thing",
+  "thingName": "",
+  "_clientId_description": "The client ID to use when connecting",
+  "clientId": "",
+  "_endpoint_description": "AWS IoT service endpoint hostname",
+  "endpoint": "",
+  "_certPath_description": "Path to the IoT thing certificate",
+  "certPath":  "",
+  "_keyPath_description": "Path to the IoT thing private key",
+  "keyPath": "",
+  "_rootCaPath_description": "Path to the root certificate (optional)",
+  "rootCaPath": null
+}

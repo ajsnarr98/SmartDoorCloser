@@ -11,7 +11,7 @@ Note: this is intended to be on a raspberry pi.
 # Installation/Setup
 
 1. Download repo
-1. Fill `setup_then_run.sh` with your aws access keys
+1. Make a file called `src/main/resources/config.json` based on `src/main/resources/config_example.json` and fill it with your relevant secrets
 1. Run `create_so.sh` to build the shared library for the device
 1. Build using `./gradlew build`
-1. Run `setup_then_run.sh`
+1. Run `run.sh`
