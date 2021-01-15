@@ -10,6 +10,7 @@ import software.amazon.awssdk.crt.mqtt.MqttClientConnection
 import software.amazon.awssdk.crt.mqtt.MqttClientConnectionEvents
 import software.amazon.awssdk.iot.AwsIotMqttConnectionBuilder
 import java.util.concurrent.ExecutionException
+import java.util.concurrent.Semaphore
 
 
 const val EVENT_LOOP_THREADS = 1
@@ -45,7 +46,16 @@ fun main() {
         config,
         onError = { exception -> log.error("Exception encountered: $exception") },
     ) { connection ->
-        val shadowHandler = ShadowHandler(connection, config)
+        // Initialize shadow client and local copy of shadow
+        ShadowHandler(connection, config).use { shadowHandler ->
+            val sema = Semaphore(0) // initialize with no available permits
+            shadowHandler.setCloseCommandListener { sema.release() }
+            while (true) {
+                // block until close command is issued via listener
+                sema.acquire()
+                log.warn("I got a close command and I don't know what to do!")
+            }
+        }
     }
 //    }
     log.debug("End of main method")
