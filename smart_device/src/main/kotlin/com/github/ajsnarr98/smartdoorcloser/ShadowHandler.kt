@@ -187,7 +187,7 @@ class ShadowHandler(private val connection: MqttClientConnection, private val co
         if (response.code == 404) {
             log.info("Thing has no shadow document to start... creating new one...")
         } else {
-            log.error("GetShadow request was rejected: code: " + response.code.toString() + " message: " + response.message)
+            log.error("GetShadow request was rejected: code: ${response.code} message: ${response.message}")
         }
         // store default initial shadow
         gotShadow.complete(Shadow.buildFrom(config,null))

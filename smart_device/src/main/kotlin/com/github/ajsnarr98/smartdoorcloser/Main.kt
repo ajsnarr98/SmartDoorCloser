@@ -52,6 +52,7 @@ fun main() {
             shadowHandler.setCloseCommandListener { sema.release() }
             while (true) {
                 // block until close command is issued via listener
+                log.info("waiting for close command...")
                 sema.acquire()
                 log.warn("I got a close command and I don't know what to do!")
             }
