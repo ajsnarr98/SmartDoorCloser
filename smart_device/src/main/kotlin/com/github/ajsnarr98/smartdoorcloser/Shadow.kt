@@ -105,9 +105,9 @@ data class Shadow(
 
         private const val ID_PROPERTY = "id"
         private const val THING_NAME_PROPERTY = "thingName"
-        private const val FRIENDLY_NAME_PROPERTY = "friendly_name"
-        private const val LAST_CLOSE_CMD_PROPERTY = "last_close_cmd"
-        private const val CLOSE_CMD_COMPLETED_PROPERTY = "close_cmd_completed"
+        private const val FRIENDLY_NAME_PROPERTY = "friendlyName"
+        private const val LAST_CLOSE_CMD_PROPERTY = "lastCloseCmd"
+        private const val CLOSE_CMD_COMPLETED_PROPERTY = "closeCmdCompleted"
 
         private const val FRIENDLY_NAME_DEFAULT = "door"
         private const val CLOSE_CMD_DEFAULT = "0"
