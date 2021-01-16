@@ -20,7 +20,8 @@ private val gson = GsonBuilder().setPrettyPrinting().create()
  * Represents config stored in a file.
  *
  * @property thingName The name of the IoT thing
- * @property clientId The client ID to use when connecting
+ * @property clientId The client ID to use when connecting. Only one active
+ *                    connection can use the same client id.
  * @property endpoint AWS IoT service endpoint hostname
  * @property certPath Path to the IoT thing certificate
  * @property keyPath Path to the IoT thing private key

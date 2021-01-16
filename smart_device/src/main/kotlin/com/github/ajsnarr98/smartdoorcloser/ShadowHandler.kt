@@ -110,15 +110,18 @@ class ShadowHandler(private val connection: MqttClientConnection, private val co
         )
         publishedGetShadow.get()
         localShadow = gotShadow.get()
-        updateShadow() // updates shadow if needed
+        updateShadow(isInitialShadow = true) // updates shadow if needed
     }
 
     /**
      * Updates the shadow using the local shadow synchronously.
      *
      * Only updates if shadow is marked for update.
+     *
+     * @param isInitialShadow - if false, will not care about updating the
+     *                          lastCloseCmd field
      */
-    private fun updateShadow(): CompletableFuture<Void?> {
+    private fun updateShadow(isInitialShadow: Boolean = false): CompletableFuture<Void?> {
         return localShadow?.withLock { shadow ->
             if (!shadow.needsUpdate) {
                 log.debug("shadow not marked for update... returning")
@@ -133,8 +136,8 @@ class ShadowHandler(private val connection: MqttClientConnection, private val co
             val request = UpdateShadowRequest().apply {
                 thingName = config.thingName
                 state = ShadowState().apply {
-                    reported = shadow.asHashMap()
-                    desired = shadow.asHashMap()
+                    reported = shadow.asHashMap(excludeLastCloseCmd = !isInitialShadow)
+                    desired = shadow.asHashMap(excludeLastCloseCmd = !isInitialShadow)
                 }
             }
 

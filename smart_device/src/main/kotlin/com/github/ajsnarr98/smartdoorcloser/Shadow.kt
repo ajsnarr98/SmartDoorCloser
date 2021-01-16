@@ -59,12 +59,15 @@ data class Shadow(
 
     /**
      * Converts this shadow to a map.
+     *
+     * @param excludeLastCloseCmd - whether or not to exclude this property
+     *                              in map
      */
-    fun asHashMap(): HashMap<String, Any?> {
+    fun asHashMap(excludeLastCloseCmd: Boolean = false): HashMap<String, Any?> {
         return HashMap<String, Any?>().apply {
             put(ID_PROPERTY, id)
             put(FRIENDLY_NAME_PROPERTY, friendlyName)
-            put(LAST_CLOSE_CMD_PROPERTY, lastCloseCmd)
+            if (!excludeLastCloseCmd) put(LAST_CLOSE_CMD_PROPERTY, lastCloseCmd)
             put(CLOSE_CMD_COMPLETED_PROPERTY, closeCmdCompleted)
         }
     }
