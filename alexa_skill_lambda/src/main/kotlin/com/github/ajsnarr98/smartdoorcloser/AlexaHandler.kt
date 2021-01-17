@@ -13,6 +13,12 @@ class AlexaHandler : RequestStreamHandler {
 
     private val gson = GsonBuilder().setPrettyPrinting().create()
 
+    // load config
+    val config = run {
+        Config.instance.verify()
+        return@run Config.instance
+    }
+
     override fun handleRequest(input: InputStream?, output: OutputStream?, context: Context?) {
         if (input == null || output == null) throw NullPointerException("Bad input. Input to request handler should not be null")
         output.write(handleRequest(getRequestString(input), context).toByteArray(Charsets.UTF_8))
@@ -29,7 +35,7 @@ class AlexaHandler : RequestStreamHandler {
         val responseObj = when (directive?.header?.namespace) {
             "Alexa.Authorization" -> AuthorizationResponse.newInstance(parsedRequest)
             "Alexa.Discovery" -> DiscoveryResponse.newInstance(parsedRequest)
-            "Alexa.ToggleController" -> ToggleControllerResponse.newInstance(parsedRequest)
+            "Alexa.ToggleController" -> ToggleControllerResponse.newInstance(parsedRequest, config, gson)
             else -> throw IllegalArgumentException("Unknown directive: ${directive?.header?.namespace}")
         }
 

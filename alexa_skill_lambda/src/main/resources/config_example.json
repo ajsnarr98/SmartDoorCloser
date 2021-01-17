@@ -1,0 +1,8 @@
+{
+  "_endpoint_description": "AWS IoT service endpoint hostname",
+  "endpoint": "",
+  "_table_description": "The DynamoDB table used for this skill",
+  "table": "SmartDoorCloser",
+  "_tableId_description": "The primary key in the table",
+  "tableId": "ItemId"
+}

@@ -34,6 +34,8 @@ abstract class Response protected constructor(private val resp: RawResponse) {
     )
 
     protected data class Payload(
+        var type: String? = null,
+        var message: String? = null,
         var endpoints: List<Endpoint>? = null,
     )
 

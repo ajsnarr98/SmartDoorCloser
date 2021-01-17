@@ -1,15 +1,36 @@
 package com.github.ajsnarr98.smartdoorcloser.iotshadow
 
-import okhttp3.Call
-import okhttp3.RequestBody
-import retrofit2.http.Body
-import retrofit2.http.POST
-import retrofit2.http.Path
+import com.github.ajsnarr98.smartdoorcloser.Config
+import com.google.gson.Gson
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 /**
- * Represents a service for making http calls to the AWS IoT shadow API.
+ * Contains retrofit instance and handles calls to the RawIotShadowService.
  */
-interface IoTShadowService {
-    @POST("things/{thingName}/shadow")
-    fun updateShadow(@Path("thingName") thingName: String, @Body stateUpdate: RequestBody): Call<>
+class IoTShadowService(
+    config: Config,
+    gson: Gson,
+) {
+    private val retrofit = Retrofit.Builder()
+        .baseUrl("https://${config.endpoint}/")
+        .addConverterFactory(GsonConverterFactory.create(gson))
+        .build()
+
+    private val ioTShadowService: RawIoTShadowService =
+        retrofit.create(RawIoTShadowService::class.java)
+
+    /**
+     * Blocking call that sends a command to change the IoT device's shadow.
+     *
+     * @return true if successful, false if not
+     */
+    fun sendCloseDoorCommand(thingName: String): Boolean {
+        val call = ioTShadowService.updateShadow(
+            thingName = thingName,
+            stateUpdate = ShadowUpdateRequestBody.createCloseCommand()
+        )
+        // make blocking call
+        return call.execute().isSuccessful
+    }
 }

@@ -18,10 +18,19 @@ repositories {
 }
 
 dependencies {
+    val retrofitVersion = "2.9.0"
+    // kotlin
     implementation(kotlin("stdlib"))
+    // gson
     implementation("com.google.code.gson:gson:2.8.6")
+    // retrofit
+    implementation("com.squareup.retrofit2:retrofit:$retrofitVersion")
+    implementation("com.squareup.retrofit2:converter-gson:$retrofitVersion")
+    // aws libs
     implementation("com.amazonaws:aws-lambda-java-core:1.2.0")
     implementation("com.amazonaws:aws-java-sdk-dynamodb:1.11.327")
+
+    // testing
     testImplementation("junit:junit:4.13.1")
 }
 

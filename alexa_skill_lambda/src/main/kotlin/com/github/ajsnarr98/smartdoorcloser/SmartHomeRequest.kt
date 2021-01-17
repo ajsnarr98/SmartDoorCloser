@@ -24,6 +24,7 @@ data class SmartHomeRequest constructor(
 
     data class Header(
         val namespace: String? = null,
+        val instance: String? = null,
         val name: String? = null,
         val payloadVersion: String? = null,
         val messageId: String? = null,

@@ -19,6 +19,7 @@ class DiscoveryResponse private constructor(resp: RawResponse) : Response(resp) 
                         }
                         payload = Payload().apply {
                             endpoints = DB().getEntries().map { entry ->
+                                // TODO - make endpoint ID equal the thingName
                                 Endpoint().apply {
                                     endpointId = entry.itemId
                                     manufacturerName = "AJ Snarr"

@@ -1,0 +1,22 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+        "Effect": "Allow",
+        "Action": [
+            "logs:CreateLogStream",
+            "dynamodb:UpdateItem",
+            "logs:CreateLogGroup",
+            "logs:PutLogEvents"
+        ],
+        "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": "iot:UpdateThingShadow",
+      "Resource": [
+        "arn:aws:iot:region:account:thing/thing"
+      ]
+    }
+  ]
+}
