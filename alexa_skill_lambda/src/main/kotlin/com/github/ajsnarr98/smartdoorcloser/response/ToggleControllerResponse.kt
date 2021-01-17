@@ -1,5 +1,6 @@
 package com.github.ajsnarr98.smartdoorcloser.response
 
+import com.amazonaws.services.lambda.runtime.LambdaLogger
 import com.github.ajsnarr98.smartdoorcloser.Config
 import com.github.ajsnarr98.smartdoorcloser.SmartHomeRequest
 import com.github.ajsnarr98.smartdoorcloser.getTimeNow
@@ -8,12 +9,13 @@ import com.google.gson.Gson
 
 class ToggleControllerResponse private constructor(resp: RawResponse) : Response(resp) {
     companion object {
-        fun newInstance(request: SmartHomeRequest, config: Config, gson: Gson): ToggleControllerResponse {
+        fun newInstance(request: SmartHomeRequest, logger: LambdaLogger, config: Config, gson: Gson): ToggleControllerResponse {
             val directive = request.directive
             val thingName: String? = directive?.endpoint?.endpointId
 
             // send close command to IoT device
-            var success = false
+            logger.log("Sending close command to endpoint $thingName\n")
+            var success: Boolean
             var invalidDirective = false
             if (thingName != null) {
                 val iotService = IoTShadowService(config, gson)

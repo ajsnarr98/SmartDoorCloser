@@ -1,5 +1,6 @@
 package com.github.ajsnarr98.smartdoorcloser.response
 
+import com.amazonaws.services.lambda.runtime.LambdaLogger
 import com.github.ajsnarr98.smartdoorcloser.SmartHomeRequest
 
 /**
@@ -9,7 +10,7 @@ import com.github.ajsnarr98.smartdoorcloser.SmartHomeRequest
  */
 class AuthorizationResponse private constructor(resp: RawResponse) : Response(resp) {
     companion object {
-        fun newInstance(request: SmartHomeRequest): AuthorizationResponse {
+        fun newInstance(request: SmartHomeRequest, logger: LambdaLogger): AuthorizationResponse {
             val directive = request.directive
 
             return when (directive?.header?.name) {

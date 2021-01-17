@@ -14,7 +14,7 @@ class AlexaHandler : RequestStreamHandler {
     private val gson = GsonBuilder().setPrettyPrinting().create()
 
     // load config
-    val config = run {
+    private val config = run {
         Config.instance.verify()
         return@run Config.instance
     }
@@ -33,9 +33,9 @@ class AlexaHandler : RequestStreamHandler {
         val parsedRequest = SmartHomeRequest.newInstance(gson, request)
         val directive = parsedRequest.directive
         val responseObj = when (directive?.header?.namespace) {
-            "Alexa.Authorization" -> AuthorizationResponse.newInstance(parsedRequest)
-            "Alexa.Discovery" -> DiscoveryResponse.newInstance(parsedRequest, config)
-            "Alexa.ToggleController" -> ToggleControllerResponse.newInstance(parsedRequest, config, gson)
+            "Alexa.Authorization" -> AuthorizationResponse.newInstance(parsedRequest, logger)
+            "Alexa.Discovery" -> DiscoveryResponse.newInstance(parsedRequest, logger, config)
+            "Alexa.ToggleController" -> ToggleControllerResponse.newInstance(parsedRequest, logger, config, gson)
             else -> throw IllegalArgumentException("Unknown directive: ${directive?.header?.namespace}")
         }
 
