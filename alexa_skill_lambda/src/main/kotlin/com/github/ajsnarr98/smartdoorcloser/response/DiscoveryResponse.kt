@@ -1,11 +1,12 @@
 package com.github.ajsnarr98.smartdoorcloser.response
 
+import com.github.ajsnarr98.smartdoorcloser.Config
 import com.github.ajsnarr98.smartdoorcloser.SmartHomeRequest
 import com.github.ajsnarr98.smartdoorcloser.DB
 
 class DiscoveryResponse private constructor(resp: RawResponse) : Response(resp) {
     companion object {
-        fun newInstance(request: SmartHomeRequest): DiscoveryResponse {
+        fun newInstance(request: SmartHomeRequest, config: Config): DiscoveryResponse {
             val directive = request.directive
 
             return DiscoveryResponse(
@@ -18,7 +19,7 @@ class DiscoveryResponse private constructor(resp: RawResponse) : Response(resp) 
                             payloadVersion = directive?.header?.payloadVersion
                         }
                         payload = Payload().apply {
-                            endpoints = DB().getEntries().map { entry ->
+                            endpoints = DB(config).getEntries().map { entry ->
                                 // TODO - make endpoint ID equal the thingName
                                 Endpoint().apply {
                                     endpointId = entry.itemId

@@ -34,7 +34,7 @@ class AlexaHandler : RequestStreamHandler {
         val directive = parsedRequest.directive
         val responseObj = when (directive?.header?.namespace) {
             "Alexa.Authorization" -> AuthorizationResponse.newInstance(parsedRequest)
-            "Alexa.Discovery" -> DiscoveryResponse.newInstance(parsedRequest)
+            "Alexa.Discovery" -> DiscoveryResponse.newInstance(parsedRequest, config)
             "Alexa.ToggleController" -> ToggleControllerResponse.newInstance(parsedRequest, config, gson)
             else -> throw IllegalArgumentException("Unknown directive: ${directive?.header?.namespace}")
         }
